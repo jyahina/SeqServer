@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 3.15)
+
+add_executable(SeqServer SeqServer.cpp)
+target_link_libraries(SeqServer client)
+set_target_properties(SeqServer PROPERTIES CXX_STANDARD 17)
