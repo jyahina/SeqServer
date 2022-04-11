@@ -13,14 +13,15 @@ namespace client
     {
         public:
             ClientHandler(std::unique_ptr<socket::Socket> currentSocket);
-            
+            ~ClientHandler();
+
             void main();
 
         private:
             struct SequenceProperty
             {
                 SequenceProperty(const std::smatch& parsedLine);
-                
+
                 bool IsValidProperty() const;
 
                 bool available = false;

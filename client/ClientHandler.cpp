@@ -47,6 +47,11 @@ namespace client
         sequenceProperties.resize(SEQUENCE_COUNT);
     }
 
+    ClientHandler::~ClientHandler()
+    {
+        this->socket->Close();
+    }
+
     void ClientHandler::main()
     {
         std::string buffer = "";
