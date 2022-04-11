@@ -6,8 +6,5 @@
 
 namespace socket
 {
-    class SocketFactory
-    {
-        static std::unique_ptr<Socket> CreateSocket(sockaddr *addr = nullptr, int *addrlen = nullptr);
-    }
+    static std::unique_ptr<Socket> CreateSocket(sockaddr *addr = nullptr, int *addrlen = nullptr);
 }

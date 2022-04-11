@@ -10,7 +10,7 @@ namespace socket
 
 namespace socket
 {
-    std::unique_ptr<Socket> SocketFactory::CreateSocket(sockaddr *addr, int *addrlen)
+    std::unique_ptr<Socket> CreateSocket(sockaddr *addr, int *addrlen)
     {
         const auto handle = accept(handle, addr, (socklen_t *)addrlen);
         

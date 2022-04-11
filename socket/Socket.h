@@ -16,6 +16,8 @@ namespace socket
             Socket(int handle = 0);
             Socket(int addressFamily, int type, int protocol)
 
+            ~Socket();
+
             void Create(const sockaddr *addr, int addrLenght);
             void Connect(const sockaddr *addr, int addrLenght);
             void Listen(int log);
@@ -37,5 +39,5 @@ namespace socket
             std::mutex signalMutex;
 
             void CreateSignal();
-    }
+    };
 }

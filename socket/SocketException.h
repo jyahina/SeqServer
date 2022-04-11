@@ -8,9 +8,9 @@ namespace socket
     {
         public:
             SocketException(const char *what);
-            SocketException(int code);
+            SocketException(int handle);
 
         private:
-            const int codeError;
-    }
+            const int handleError;
+    };
 }

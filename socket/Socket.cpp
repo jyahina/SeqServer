@@ -41,6 +41,11 @@ namespace socket
         CallFunction([&](){return socket(addressFamily, type, protocol);});
     }
 
+    Socket::~Socket()
+    {
+        Close();
+    }
+
     void Socket::Create(const sockaddr *addr, int addrLenght)
     {
         CallFunction([&](){ return bind(this->handle, addr, addrLenght);})l
