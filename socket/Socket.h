@@ -7,6 +7,7 @@
 #include <netdb.h>
 #include <string>
 #include <stdexcept>
+#include <mutex>
 
 namespace socket
 {
@@ -14,15 +15,14 @@ namespace socket
     {
         public:
             Socket(int handle = 0);
-            Socket(int addressFamily, int type, int protocol)
-
-            ~Socket();
+            Socket(int addressFamily, int type, int protocol);
 
             void Create(const sockaddr *addr, int addrLenght);
             void Connect(const sockaddr *addr, int addrLenght);
             void Listen(int log);
             void Close();
             
+            int GetHandle() const;
             int Recv(void *buffer, int lenght, int flags = 0);
             int RecvFrom(void *buffer, int lenght, int flags, sockaddr *from, int *fromlen);
             int Read(void *buffer, int lenght);
@@ -33,8 +33,10 @@ namespace socket
             static void GetAddrInfo(const char *nodeName, const char *serviceName, const addrinfo *info, addrinfo **result);
             static void FreeAddrInfo(addrinfo * &info);
 
+            bool IsValid() const;
+
         private:
-            const int handle;
+            int handle;
             bool signalAccept;
             std::mutex signalMutex;
 

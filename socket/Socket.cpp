@@ -37,13 +37,8 @@ namespace socket
     
     Socket::Socket(int addressFamily, int type, int protocol)
     {
-        CreateSignal()
+        CreateSignal();
         CallFunction([&](){return socket(addressFamily, type, protocol);});
-    }
-
-    Socket::~Socket()
-    {
-        Close();
     }
 
     void Socket::Create(const sockaddr *addr, int addrLenght)
@@ -67,6 +62,11 @@ namespace socket
         this->handle = EMPTY_HANDLE;
     }
             
+    int Socket::GetHandle() const
+    {
+        return this->handle;
+    }
+
     int Socket::Recv(void *buffer, int lenght, int flags)
     {
         return CallFunction([&](){ return recv(this->handle, buffer, lenght, flags);});
@@ -74,7 +74,7 @@ namespace socket
             
     int Socket::RecvFrom(void *buffer, int lenght, int flags, sockaddr *from, int *fromlen)
     {
-        return CallFunction([&](){ return recvfrom(this->handle, static_cast<char *>(buf), len, flags, from, static_cast<socklen_t *>(fromlen);});
+        return CallFunction([&](){ return recvfrom(this->handle, static_cast<char *>(buf), lenght, flags, from, static_cast<socklen_t *>(fromlen));});
     }
             
     int Socket::Read(void *buffer, int lenght)
@@ -99,25 +99,30 @@ namespace socket
 
     void Socket::GetAddrInfo(const char *nodeName, const char *serviceName, const addrinfo *info, addrinfo **result)
     {
-        CreateSignal()
-        return CallFunction([&](){ return getaddrinfo(nodeName, serviceName, info, result)};);
+        CreateSignal();
+        return CallFunction([&]() { return getaddrinfo(nodeName, serviceName, info, result); });
     }
 
     void Socket::FreeAddrInfo(addrinfo * &info)
     {
         if (info)
         {
-            Freeaddrinfo(std::move(info));
+            freeaddrinfo(std::move(info));
         }
+    }
+
+    bool Socket::IsValid() const
+    {
+        return IsGoodHandle(this->handle);
     }
 
     void Socket::CreateSignal()
     {
         std::lock_guard<std::mutex> lock(signalMutex);
 
-        if (!signalAccept)
+        if (!this->signalAccept)
         {
-            signalReady = true;
+            this->signalAccept = true;
             signal(SIGPIPE, SIG_IGN);
         }
     }

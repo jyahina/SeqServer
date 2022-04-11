@@ -5,20 +5,25 @@
 
 namespace socket
 {
-    int BAD_HANDLE = -1;
+    const int BAD_HANDLE = -1;
 }
 
 namespace socket
 {
-    std::unique_ptr<Socket> CreateSocket(sockaddr *addr, int *addrlen)
+    std::unique_ptr<Socket> CreateSocket(int handle, sockaddr *addr, int *addrlen)
     {
-        const auto handle = accept(handle, addr, (socklen_t *)addrlen);
+        const auto result = accept(handle, addr, (socklen_t *)addrlen);
         
-        if (handle == BAD_HANDLE) 
+        if (result == BAD_HANDLE)
         {
-            throw SocketExceptionrror(errno);
+            throw SocketException(errno);
         }
 
-        return make_unique<Socket>(handle);
+        return std::make_unique<Socket>(result);
+    }
+
+    std::unique_ptr<Socket> CreateSocket(const addrinfo& info)
+    {
+        return std::make_unique<Socket>(info.ai_family, info.ai_socktype, info.ai_protocol);
     }
 }
