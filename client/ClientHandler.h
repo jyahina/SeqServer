@@ -21,15 +21,16 @@ namespace client
             {
                 SequenceProperty(const std::smatch& parsedLine);
                 
-                bool IsValidProperty();
+                bool IsValidProperty() const;
 
+                bool available = false;
                 uint64_t id = 0;
                 uint64_t first = 0;
                 uint64_t step = 0;
                 
             private:
-                bool IsValidSequenceIndex();
-                bool IsValidStep();
+                bool IsValidSequenceIndex() const;
+                bool IsValidStep() const;
             };
         
         private:
@@ -40,10 +41,9 @@ namespace client
             std::vector<SequenceProperty> sequenceProperties;
             
             bool ExecuteCommand(const std::string &line);
-            bool GenerateSequence(const SequenceProperty &property);
+            bool UpdateSequence(const SequenceProperty &property);
             bool ExportSequence();
-
-            std::string GenerateStringSequence(const SequenceProperty &property);
-
+            bool IsAvailableSequenceProperty() const;
+            void SendWaitToUser();
     };    
 }

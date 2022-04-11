@@ -82,9 +82,9 @@ namespace socket
         return CallFunction([&](){ return read(this->handle, buffer, lenght);});
     }
      
-    int Socket::Send(const void *buffer, int lenght, int flags)
+    int Socket::Send(const std::string &buffer, int flags)
     {
-        return CallFunction([&](){ return send(this->handle, buffer, lenght, flags);});
+        return CallFunction([&](){ return send(this->handle, buffer.c_str(), buffer.size(), flags);});
     }
             
     int Socket::SendTo(const void *buffer, int lenght, int flags, const sockaddr *to, int tolen)

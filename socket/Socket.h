@@ -26,7 +26,7 @@ namespace socket
             int Recv(void *buffer, int lenght, int flags = 0);
             int RecvFrom(void *buffer, int lenght, int flags, sockaddr *from, int *fromlen);
             int Read(void *buffer, int lenght);
-            int Send(const void *buffer, int lenght, int flags = 0);
+            int Send(const std::string &buffer, int flags = 0);
             int SendTo(const void *buffer, int lenght, int flags, const sockaddr *to, int tolen);
             int Write(const void *buffer, int lenght);
 
