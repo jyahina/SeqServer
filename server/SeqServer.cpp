@@ -38,25 +38,25 @@ int main()
 {
     auto hint = GetAddrInfo();
     addrinfo* server = nullptr;
-    std::unique_ptr<socket::Socket> socket;
+    std::unique_ptr<net_socket::Socket> socket;
 
     try
     {
-        socket::Socket::GetAddrInfo(IP, PORT, &hint, &server);
-        socket = socket::CreateSocket(hint);
+        net_socket::Socket::GetAddrInfo(IP, PORT, &hint, &server);
+        socket = net_socket::CreateSocket(hint);
 
         socket->Create(server->ai_addr, sizeof(addrinfo));
         socket->Listen(LISTEN_TIME_MILLISECONDS);
 
         while (true) {
-            std::unique_ptr<socket::Socket> client = socket::CreateSocket(socket->GetHandle());
+            std::unique_ptr<net_socket::Socket> client = net_socket::CreateSocket(socket->GetHandle());
             auto handler = std::make_unique<client::ClientHandler>(std::move(client));
 
             std::thread(&client::ClientHandler::main, handler).detach();
             std::this_thread::sleep_for(std::chrono::microseconds(LISTEN_TIME_MILLISECONDS));
         }
     }
-    catch (socket::SocketException& e)
+    catch (net_socket::SocketException& e)
     {
         std::cout << e.what() << std::endl;
 
@@ -65,7 +65,7 @@ int main()
             socket->Close();
         }
 
-        socket::Socket::FreeAddrInfo(server);
+        net_socket::Socket::FreeAddrInfo(server);
         return 1;
     }
 

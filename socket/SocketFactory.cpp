@@ -3,12 +3,12 @@
 #include "SocketFactory.h"
 #include "SocketException.h"
 
-namespace socket
+namespace net_socket
 {
     const int BAD_HANDLE = -1;
 }
 
-namespace socket
+namespace net_socket
 {
     std::unique_ptr<Socket> CreateSocket(int handle, sockaddr *addr, int *addrlen)
     {

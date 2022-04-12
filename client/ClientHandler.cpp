@@ -39,7 +39,7 @@ namespace client
 
 namespace client
 {
-    ClientHandler::ClientHandler(std::unique_ptr<socket::Socket> currentSocket)
+    ClientHandler::ClientHandler(std::unique_ptr<net_socket::Socket> currentSocket)
     : socket(std::move(currentSocket))
     , sequenceRegex(SEQUENCE_REGEX_STRING)
     , exportRegex(EXPORT_REGEX_STRING)
@@ -82,7 +82,7 @@ namespace client
                 std::this_thread::sleep_for(std::chrono::microseconds(SLEEP_TIME_MILLISECONDS));
             }
         }
-        catch (socket::SocketException& e)
+        catch (net_socket::SocketException& e)
         {
             std::cout << e.what() << std::endl;
             return;

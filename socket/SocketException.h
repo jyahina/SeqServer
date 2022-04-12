@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-namespace socket
+namespace net_socket
 {
     class SocketException : public std::runtime_error
     {

@@ -12,7 +12,7 @@ namespace client
     class ClientHandler
     {
         public:
-            ClientHandler(std::unique_ptr<socket::Socket> currentSocket);
+            ClientHandler(std::unique_ptr<net_socket::Socket> currentSocket);
             ~ClientHandler();
 
             void main();
@@ -38,7 +38,7 @@ namespace client
             const std::regex sequenceRegex;
             const std::regex exportRegex;
 
-            std::unique_ptr<socket::Socket> socket;
+            std::unique_ptr<net_socket::Socket> socket;
             std::vector<SequenceProperty> sequenceProperties;
             
             bool ExecuteCommand(const std::string &line);

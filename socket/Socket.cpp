@@ -27,7 +27,7 @@ int CallFunction(const F &function)
 
 //------------------------------
 
-namespace socket
+namespace net_socket
 {
     Socket::Socket(int handle)
     : handle(handle)
@@ -38,7 +38,7 @@ namespace socket
     Socket::Socket(int addressFamily, int type, int protocol)
     {
         CreateSignal();
-        CallFunction([&](){return socket(addressFamily, type, protocol);});
+        CallFunction([&](){return net_socket(addressFamily, type, protocol);});
     }
 
     void Socket::Create(const sockaddr *addr, int addrLenght)

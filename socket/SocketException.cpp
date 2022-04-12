@@ -2,7 +2,7 @@
 
 #include <string>
 
-namespace socket
+namespace net_socket
 {
     SocketException::SocketException(const char *what)
     : std::runtime_error(what)

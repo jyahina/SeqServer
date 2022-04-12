@@ -1,15 +1,15 @@
 #pragma once
 
 #include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netinet/tcp.h>
-#include <netdb.h>
+//#include <sys/socket.h>
+//#include <netinet/in.h>
+//#include <netinet/tcp.h>
+//#include <netdb.h>
 #include <string>
 #include <stdexcept>
 #include <mutex>
 
-namespace socket
+namespace net_socket
 {
     class Socket
     {
