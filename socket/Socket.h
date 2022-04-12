@@ -1,10 +1,10 @@
 #pragma once
 
 #include <sys/types.h>
-//#include <sys/socket.h>
-//#include <netinet/in.h>
-//#include <netinet/tcp.h>
-//#include <netdb.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <netdb.h>
 #include <string>
 #include <stdexcept>
 #include <mutex>
@@ -24,12 +24,9 @@ namespace net_socket
             
             int GetHandle() const;
             int Recv(void *buffer, int lenght, int flags = 0);
-            int RecvFrom(void *buffer, int lenght, int flags, sockaddr *from, int *fromlen);
-            int Read(void *buffer, int lenght);
             int Send(const std::string &buffer, int flags = 0);
-            int SendTo(const void *buffer, int lenght, int flags, const sockaddr *to, int tolen);
-            int Write(const void *buffer, int lenght);
-
+ 
+            static void CreateSignal();
             static void GetAddrInfo(const char *nodeName, const char *serviceName, const addrinfo *info, addrinfo **result);
             static void FreeAddrInfo(addrinfo * &info);
 
@@ -37,9 +34,8 @@ namespace net_socket
 
         private:
             int handle;
-            bool signalAccept;
-            std::mutex signalMutex;
+            static bool signalAccept;
+            static std::mutex signalMutex;
 
-            void CreateSignal();
     };
 }

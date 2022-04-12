@@ -1,6 +1,9 @@
 #include "SocketException.h"
 
 #include <string>
+#include <cerrno>
+#include <cstring>
+#include <stdexcept>
 
 namespace net_socket
 {
@@ -9,8 +12,13 @@ namespace net_socket
     , handleError(0)
     {}
 
+    SocketException::SocketException(const std::string &what) 
+    : std::runtime_error(what)
+    , handleError(0) 
+    {}
+
     SocketException::SocketException(int handle)
-    : std::runtime_error("Error code:" + std::to_string(handle))
+    : std::runtime_error(std::strerror(handle))
     , handleError(handle)
     {} 
 }

@@ -1,5 +1,3 @@
-#pragma once
-
 #include "SocketFactory.h"
 #include "SocketException.h"
 

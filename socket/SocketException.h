@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdexcept>
+#include <string>
 
 namespace net_socket
 {
@@ -8,6 +9,7 @@ namespace net_socket
     {
         public:
             SocketException(const char *what);
+            SocketException(const std::string &what);
             SocketException(int handle);
 
         private:

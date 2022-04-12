@@ -1,15 +1,33 @@
 #include "Socket.h"
+#include "SocketException.h"
+
+#include <csignal>
+#include <cstring>
+#include <cerrno>
+#include <unistd.h>
 
 //------------------------------
 int BAD_HANDLE = -1;
 int EMPTY_HANDLE = 0;
 //------------------------------
-
+static bool signalAccept = false;
+static std::mutex signalMutex;
 //------------------------------
 
 bool IsGoodHandle(int handle)
 {
     return handle != BAD_HANDLE;  
+}
+
+void CreateSignal()
+{
+    std::lock_guard<std::mutex> lock(signalMutex);
+
+    if (!signalAccept)
+    {
+        signalAccept = true;
+        signal(SIGPIPE, SIG_IGN);
+    }
 }
 
 template <typename F>
@@ -19,7 +37,7 @@ int CallFunction(const F &function)
 
     if (!IsGoodHandle(handle))
     {
-        throw SocketException(errno);
+        throw net_socket::SocketException(errno);
     }
 
     return handle;
@@ -32,23 +50,23 @@ namespace net_socket
     Socket::Socket(int handle)
     : handle(handle)
     {
-         CreateSignal();
+        CreateSignal();
     }
     
     Socket::Socket(int addressFamily, int type, int protocol)
     {
         CreateSignal();
-        CallFunction([&](){return net_socket(addressFamily, type, protocol);});
+        CallFunction([&](){ return socket(addressFamily, type, protocol);});
     }
 
     void Socket::Create(const sockaddr *addr, int addrLenght)
     {
-        CallFunction([&](){ return bind(this->handle, addr, addrLenght);})l
+        CallFunction([&](){ return bind(this->handle, addr, addrLenght);});
     }
                
     void Socket::Connect(const sockaddr *addr, int addrLenght)
     {
-        CallFunction([&](){ return connect(this->handle, addr, addrLenght)});
+        CallFunction([&](){ return connect(this->handle, addr, addrLenght);});
     }
 
     void Socket::Listen(int log)
@@ -71,36 +89,16 @@ namespace net_socket
     {
         return CallFunction([&](){ return recv(this->handle, buffer, lenght, flags);});
     }
-            
-    int Socket::RecvFrom(void *buffer, int lenght, int flags, sockaddr *from, int *fromlen)
-    {
-        return CallFunction([&](){ return recvfrom(this->handle, static_cast<char *>(buf), lenght, flags, from, static_cast<socklen_t *>(fromlen));});
-    }
-            
-    int Socket::Read(void *buffer, int lenght)
-    {
-        return CallFunction([&](){ return read(this->handle, buffer, lenght);});
-    }
      
     int Socket::Send(const std::string &buffer, int flags)
     {
         return CallFunction([&](){ return send(this->handle, buffer.c_str(), buffer.size(), flags);});
     }
-            
-    int Socket::SendTo(const void *buffer, int lenght, int flags, const sockaddr *to, int tolen)
-    {
-        return CallFunction([&](){ return sendto(this->handle, buffer, lenght, flags, to, tolen);});
-    }
-            
-    int Socket::Write(const void *buffer, int lenght)
-    {
-        return CallFunction([&](){ return write(this->handle, buffer, lenght);});
-    }
 
     void Socket::GetAddrInfo(const char *nodeName, const char *serviceName, const addrinfo *info, addrinfo **result)
     {
         CreateSignal();
-        return CallFunction([&]() { return getaddrinfo(nodeName, serviceName, info, result); });
+        CallFunction([&]() { return getaddrinfo(nodeName, serviceName, info, result); });
     }
 
     void Socket::FreeAddrInfo(addrinfo * &info)
@@ -114,16 +112,5 @@ namespace net_socket
     bool Socket::IsValid() const
     {
         return IsGoodHandle(this->handle);
-    }
-
-    void Socket::CreateSignal()
-    {
-        std::lock_guard<std::mutex> lock(signalMutex);
-
-        if (!this->signalAccept)
-        {
-            this->signalAccept = true;
-            signal(SIGPIPE, SIG_IGN);
-        }
     }
 }
