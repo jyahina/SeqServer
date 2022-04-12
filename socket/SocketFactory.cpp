@@ -1,4 +1,5 @@
 #include "SocketFactory.h"
+#include "Socket.h"
 #include "SocketException.h"
 
 namespace net_socket

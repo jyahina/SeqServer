@@ -26,7 +26,6 @@ namespace net_socket
             int Recv(void *buffer, int lenght, int flags = 0);
             int Send(const std::string &buffer, int flags = 0);
  
-            static void CreateSignal();
             static void GetAddrInfo(const char *nodeName, const char *serviceName, const addrinfo *info, addrinfo **result);
             static void FreeAddrInfo(addrinfo * &info);
 

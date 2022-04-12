@@ -34,7 +34,7 @@ addrinfo GetAddrInfo()
 
 int main()
 {
-    auto hint = GetAddrInfo();
+    addrinfo hint = GetAddrInfo();
     addrinfo* server = nullptr;
     std::unique_ptr<net_socket::Socket> socket;
 
@@ -50,7 +50,7 @@ int main()
             std::unique_ptr<net_socket::Socket> client = net_socket::CreateSocket(socket->GetHandle());
             auto handler = std::make_unique<client::ClientHandler>(std::move(client));
 
-            std::thread(&client::ClientHandler::main, handler).detach();
+            std::thread(&client::ClientHandler::main, std::move(handler)).detach();
             std::this_thread::sleep_for(std::chrono::microseconds(LISTEN_TIME_MILLISECONDS));
         }
     }

@@ -4,3 +4,7 @@ add_executable(${MAIN_TARGET} SeqServer.cpp)
 
 target_include_directories(${MAIN_TARGET} PRIVATE 
 	${CMAKE_SOURCE_DIR})
+
+target_link_libraries(${MAIN_TARGET} 
+	socket	
+	client)

@@ -8,4 +8,3 @@ add_library(socket STATIC
 	SocketException.cpp
 	SocketFactory.cpp)
 
-target_link_libraries(${MAIN_TARGET} socket)
