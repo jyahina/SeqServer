@@ -40,16 +40,16 @@ namespace client
 namespace client
 {
     ClientHandler::ClientHandler(std::unique_ptr<net_socket::Socket> currentSocket)
-    : socket(std::move(currentSocket))
-    , sequenceRegex(SEQUENCE_REGEX_STRING)
+    : sequenceRegex(SEQUENCE_REGEX_STRING)
     , exportRegex(EXPORT_REGEX_STRING)
+    , netSocket(std::move(currentSocket))
     {
         sequenceProperties.resize(SEQUENCE_COUNT);
     }
 
     ClientHandler::~ClientHandler()
     {
-        this->socket->Close();
+        this->netSocket->Close();
     }
 
     void ClientHandler::main()
@@ -65,7 +65,7 @@ namespace client
             {
                 memset(input, 0, sizeof(input)); // set cmd data
 
-                this->socket->Recv(input, MAX_LENGTH_LINE);
+                this->netSocket->Recv(input, MAX_LENGTH_LINE);
 
                 buffer.append(input);
 
@@ -149,7 +149,7 @@ namespace client
 
             sequences.append("\r\n");
 
-            this->socket->Send(sequences);
+            this->netSocket->Send(sequences);
 
             std::this_thread::sleep_for(std::chrono::microseconds(SLEEP_TIME_MILLISECONDS));
         }
@@ -171,6 +171,6 @@ namespace client
 
     void ClientHandler::SendWaitToUser()
     {
-        this->socket->Send(WAIT_COMMAND);
+        this->netSocket->Send(WAIT_COMMAND);
     }
 }

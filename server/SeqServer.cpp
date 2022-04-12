@@ -1,9 +1,7 @@
-#pragma once
-
-#include "Socket.h"
-#include "SocketException.h"
-#include "SocketFactory.h"
-#include "ClientHandler.h"
+#include "socket/Socket.h"
+#include "socket/SocketException.h"
+#include "socket/SocketFactory.h"
+#include "client/ClientHandler.h"
 
 #include <iostream>
 #include <thread>

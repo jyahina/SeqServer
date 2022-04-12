@@ -6,8 +6,5 @@ add_library(client STATIC
 
 target_link_libraries(${MAIN_TARGET} client)
 
-target_include_directories(${MAIN_TARGET} PRIVATE 
-	${CMAKE_CURRENT_SOURCE_DIR})
-
 target_include_directories(client PRIVATE 
 	${CMAKE_SOURCE_DIR})

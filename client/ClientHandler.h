@@ -20,6 +20,7 @@ namespace client
         private:
             struct SequenceProperty
             {
+                SequenceProperty() = default;
                 SequenceProperty(const std::smatch& parsedLine);
 
                 bool IsValidProperty() const;
@@ -38,7 +39,7 @@ namespace client
             const std::regex sequenceRegex;
             const std::regex exportRegex;
 
-            std::unique_ptr<net_socket::Socket> socket;
+            std::unique_ptr<net_socket::Socket> netSocket;
             std::vector<SequenceProperty> sequenceProperties;
             
             bool ExecuteCommand(const std::string &line);
