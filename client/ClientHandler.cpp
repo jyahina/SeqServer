@@ -7,11 +7,14 @@
 
 //----------
 const size_t SEQUENCE_COUNT = 3;
-const size_t MAX_LENGTH_LINE = 60;
-const int SLEEP_TIME_MILLISECONDS = 100;
+const size_t MAX_LENGTH_LINE = 50;
+
+const int SLEEP_TIME_MILLISECONDS = 50;
+const int CONNECTION_CLOSED_CODE = 0;
+
 const std::string SEQUENCE_REGEX_STRING = "^seq(\\d) (\\d+) (\\d+)";
 const std::string EXPORT_REGEX_STRING = "^export seq";
-const std::string WAIT_COMMAND = "-> ";
+const std::string WAIT_COMMAND = "command> ";
 //----------
 
 namespace client
@@ -64,17 +67,20 @@ namespace client
             while (true)
             {
                 memset(input, 0, sizeof(input)); // set cmd data
-
-                this->netSocket->Recv(input, MAX_LENGTH_LINE);
+                if (this->netSocket->Recv(input, MAX_LENGTH_LINE) == CONNECTION_CLOSED_CODE) 
+                {
+                    throw net_socket::SocketException("Connection closed!!");
+                }
 
                 buffer.append(input);
 
                 const auto endLine = buffer.find("\n");
+                
                 if (endLine != std::string::npos)
                 {
                     const auto command = buffer.substr(0, endLine);
                     buffer = buffer.substr(endLine + 1, buffer.size());
-
+                    
                     ExecuteCommand(command);
                     SendWaitToUser();
                 }
@@ -84,7 +90,7 @@ namespace client
         }
         catch (net_socket::SocketException& e)
         {
-            std::cout << e.what() << std::endl;
+            std::cout << "Error from client handler:" << e.what() << std::endl;
             return;
         }
     }
