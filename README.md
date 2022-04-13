@@ -45,9 +45,9 @@
 ## Сборка
 
   ```bash
-  mkdir build && cd build
-  cmake ..
-  make -j4 socket && make -j4 client && make -j4 server
+ mkdir build && cd build
+ cmake ..
+ make -j4 server
   ```
 
 ## Запуск
