@@ -66,16 +66,12 @@ namespace client
 
             while (true)
             {
-                memset(input, 0, sizeof(input)); // set cmd data
-                if (this->netSocket->Recv(input, MAX_LENGTH_LINE) == CONNECTION_CLOSED_CODE) 
-                {
-                    throw net_socket::SocketException("Connection closed!!");
-                }
+                SetInputUserCommand(input, sizeof(input));
 
                 buffer.append(input);
 
                 const auto endLine = buffer.find("\n");
-                
+
                 if (endLine != std::string::npos)
                 {
                     const auto command = buffer.substr(0, endLine);
@@ -120,7 +116,7 @@ namespace client
             return false;
         }
 
-        sequenceProperties[property.id] = property;
+        sequenceProperties[property.id - 1] = property;
 
         return true;
     }
@@ -178,5 +174,15 @@ namespace client
     void ClientHandler::SendWaitToUser()
     {
         this->netSocket->Send(WAIT_COMMAND);
+    }
+
+    void ClientHandler::SetInputUserCommand(char* input, size_t lengthInput)
+    {
+        memset(input, 0, lengthInput);
+        
+        if (this->netSocket->Recv(input, MAX_LENGTH_LINE) == CONNECTION_CLOSED_CODE) 
+        {
+            throw net_socket::SocketException("Connection closed!!");
+        }
     }
 }

@@ -47,5 +47,6 @@ namespace client
             bool ExportSequence();
             bool IsAvailableSequenceProperty() const;
             void SendWaitToUser();
+            void SetInputUserCommand(char* input, size_t lengthInput);
     };    
 }
