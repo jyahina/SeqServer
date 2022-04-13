@@ -47,8 +47,8 @@ int CallFunction(const F &function)
 
 namespace net_socket
 {
-    Socket::Socket(int handle)
-    : handle(handle)
+    Socket::Socket(int sHandle)
+    : handle(sHandle)
     {
         CreateSignal();
     }
@@ -56,10 +56,10 @@ namespace net_socket
     Socket::Socket(int addressFamily, int type, int protocol)
     {
         CreateSignal();
-        CallFunction([&](){ return socket(addressFamily, type, protocol);});
+        this->handle = CallFunction([&](){ return socket(addressFamily, type, protocol);});
     }
 
-    void Socket::Create(const sockaddr *addr, int addrLenght)
+    void Socket::Bind(const sockaddr *addr, int addrLenght)
     {
         CallFunction([&](){ return bind(this->handle, addr, addrLenght);});
     }

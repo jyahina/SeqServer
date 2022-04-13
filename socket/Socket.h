@@ -14,10 +14,10 @@ namespace net_socket
     class Socket
     {
         public:
-            Socket(int handle = 0);
+            Socket(int sHandle = 0);
             Socket(int addressFamily, int type, int protocol);
 
-            void Create(const sockaddr *addr, int addrLenght);
+            void Bind(const sockaddr *addr, int addrLenght);
             void Connect(const sockaddr *addr, int addrLenght);
             void Listen(int log);
             void Close();

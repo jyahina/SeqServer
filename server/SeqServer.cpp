@@ -13,8 +13,8 @@
 
 //------------------
 
-const char* IP = "127.0.0.0";
-const char* PORT = "8080";
+const char* IP = "127.0.0.1";
+const char* PORT = "1234";
 const int LISTEN_TIME_MILLISECONDS = 100;
 //------------------
 
@@ -41,27 +41,23 @@ int main()
     try
     {
         net_socket::Socket::GetAddrInfo(IP, PORT, &hint, &server);
-        socket = net_socket::CreateSocket(hint);
 
-        socket->Create(server->ai_addr, sizeof(addrinfo));
+        socket = net_socket::CreateSocket(hint);
+        socket->Bind(server->ai_addr, sizeof(addrinfo));
         socket->Listen(LISTEN_TIME_MILLISECONDS);
 
         while (true) {
-            std::unique_ptr<net_socket::Socket> client = net_socket::CreateSocket(socket->GetHandle());
-            auto handler = std::make_unique<client::ClientHandler>(std::move(client));
+            auto clientHandler = new client::ClientHandler(net_socket::CreateSocket(socket->GetHandle()));
 
-            std::thread(&client::ClientHandler::main, std::move(handler)).detach();
+            std::thread(&client::ClientHandler::main, clientHandler).detach();
             std::this_thread::sleep_for(std::chrono::microseconds(LISTEN_TIME_MILLISECONDS));
         }
     }
     catch (net_socket::SocketException& e)
     {
-        std::cout << e.what() << std::endl;
+        std::cout << "Error from server: " << e.what() << std::endl;
 
-        if (socket->IsValid())
-        {
-            socket->Close();
-        }
+        socket->Close();        
 
         net_socket::Socket::FreeAddrInfo(server);
         return 1;
