@@ -57,7 +57,7 @@ Terminal №1:
 ./server/server
 ```
 
-Terminal #2
+Terminal №2
 ```bash 
 telnet 127.0.0.1 1234
 ```
