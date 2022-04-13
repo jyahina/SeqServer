@@ -41,3 +41,28 @@
 	3	5	7
 	5	8	11
 	...
+
+## Сборка
+
+  ```bash
+  mkdir build && cd build
+  cmake ..
+  make -j4 socket && make -j4 client && make -j4 server
+  ```
+
+## Запуск
+
+Terminal №1: 
+```bash
+./server/server
+```
+
+Terminal #2
+```bash 
+telnet 127.0.0.1 1234
+```
+Затем можно вводить комманды:
+* seq1 1 2
+* seq2 2 3
+* seq3 3 4
+* export seq
